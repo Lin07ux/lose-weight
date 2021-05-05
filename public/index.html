@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>减重排行榜</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/1.1.3/weui.min.css">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div id="app" v-cloak>
+    <section class="users" v-show="! showRanking">
+      <input class="search" type="text" placeholder="输入用户姓名，按下 Enter 键搜索" v-model.trim="keyword" @keyup.enter="filter">
+
+      <div class="list">
+        <div class="item" v-for="(user, key) in users" v-show="user.show" @click="editUser(key)">{{ user.name }}</div>
+        <div class="item add" v-if="isMaster && ! isStarted" @click="addUser">+ 添加用户</div>
+      </div>
+
+      <button class="begin" v-if="! isStarted" @click="start">开始排行</button>
+      <button class="toggle" v-else @click="showRanking = true">查看排行榜</button>
+
+      <div id="form" class="form" v-show="showForm">
+        <h3 class="title">{{ form.id ? "更新信息" : "添加用户"}}</h3>
+
+        <div class="weui-cells weui-cells_form">
+          <div class="weui-cell">
+            <div class="weui-cell__hd">
+              <label class="weui-label">用户姓名：</label>
+            </div>
+            <div class="weui-cell__bd">
+              <input class="weui-input" v-model.trim="form.name" type="text" :readonly="!isMaster || isStarted" placeholder="输入用户姓名">
+            </div>
+          </div>
+          <div class="weui-cell">
+            <div class="weui-cell__hd">
+              <label class="weui-label">初始体重：</label>
+            </div>
+            <div class="weui-cell__bd">
+              <input class="weui-input" v-model.number="form.oldWeight" type="num" min="1" :readonly="isStarted" placeholder="请输入用户初始体重（kg）">
+            </div>
+          </div>
+          <div class="weui-cell" v-if="isStarted">
+            <div class="weui-cell__hd">
+              <label class="weui-label">当前体重：</label>
+            </div>
+            <div class="weui-cell__bd">
+              <input class="weui-input" v-model.number="form.newWeight" type="num" min="1" placeholder="请输入用户当前体重（kg）">
+            </div>
+          </div>
+        </div>
+
+        <div class="weui-btn-area">
+          <span class="weui-btn weui-btn_primary" @click="submit">提交</span>
+          <span class="weui-btn weui-btn_default" @click="showForm = false">取消</span>
+          <span class="weui-btn weui-btn_warn" v-show="isMaster && !isStarted && form.id" @click="deleteUser">删除</san>
+        </div>
+      </div>
+    </section>
+
+    <section class="ranking" v-show="showRanking">
+      <div class="title">减重排行榜</div>
+
+      <ul class="list">
+        <li class="item" v-for="(user, order) in rankList">
+          <i class="order" :class="{ first: order == 0, second: order == 1, third: order== 2 }">{{ order + 1 }}</i>
+          <span class="name">{{ user.name }}</span>
+          <span class="percentage">
+            <span class="entity" :class="{ red: user.reduction > 0 }" :style="{ width: user.percentage + '%' }"></span>
+          </span>
+          <span class="reduction" v-if="user.reduction <= 0">{{ user.reduction }}kg</span>
+          <span class="reduction red" v-else>+{{ user.reduction }}kg</span>
+        </li>
+      </ul>
+
+      <button class="toggle" @click="showRanking = false">查看全部用户</button>
+    </section>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+  <script src="https://res.wx.qq.com/open/libs/weuijs/1.2.1/weui.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
+  <script>
+    const BASE_REDUCTION = 50;
+
+    new Vue({
+      el: "#app",
+      data: {
+        isMaster: false,
+        loading: false,
+        isStarted: false,
+        showRanking: true,
+        showForm: false,
+        form: { id: null, name: null, oldWeight: null, newWeight: null },
+        users: {},
+        keyword: ''
+      },
+      computed: {
+        rankList() {
+          const list = [];
+
+          for (key in this.users) {
+            let { name, oldWeight, newWeight } = this.users[key];
+
+            if (newWeight > 0) {
+              let reduction = newWeight - oldWeight;
+              let percentage = Math.abs(reduction) / BASE_REDUCTION * 100;
+
+              list.push({ name, oldWeight, newWeight, reduction, percentage })
+            }
+          }
+
+          return list.sort((prevUser, nextUser) => {
+            return (prevUser.reduction - nextUser.reduction) || (prevUser.newWeight - nextUser.newWeight);
+          })
+        }
+      },
+      created () {
+        window.socket = io({ path: '/server', query: { token: this.formatQueries()['token'] }});
+
+        socket.on('init', this.init);
+        socket.on('error', this.showMessage);
+        socket.on('start', this.started);
+        socket.on('user-update', this.updateUser);
+      },
+      methods: {
+        // 初始化信息
+        init(isMaster, isStarted, users) {
+          for (key in users) {
+            users[key].show = true;
+          }
+
+          this.isMaster = isMaster;
+          this.isStarted = isStarted;
+          this.users = users;
+        },
+
+        // 错误信息
+        showMessage(message) { weui.topTips(message, 3000) },
+
+        // 开始
+        start(isStarted) {
+          if (! window.startLoading) {
+            window.startLoading = weui.loading('开始中');
+            socket.emit('start');
+          }
+        },
+        // 已开始
+        started() {
+          this.isStarted = true;
+          this.shwoForm = false;
+
+          setTimeout(() => {
+            window.startLoading && window.startLoading.hide();
+            delete window.startLoading;
+          }, 300)
+        },
+
+        // 添加用户
+        addUser() {
+          Object.assign(this.form, { id: null, name: null, oldWeight: null, newWeight: null });
+          this.showForm = true;
+        },
+        // 编辑用户
+        editUser(key) {
+          Object.assign(this.form, this.users[key], { id: key });
+          this.showForm = true;
+        },
+        // 提交用户信息
+        submit() {
+          if (! this.form.name) {
+            return weui.topTips('请输入用户姓名', 2500)
+          }
+
+          if (this.form.oldWeight < 1) {
+            return weui.topTips('请输入正确的用户初始的体重', 2500)
+          }
+
+          if (this.isStarted && this.form.newWeight < 1) {
+            return weui.topTips('请输入正确的用户当前体重', 2500);
+          }
+
+          const key = this.form.id;
+
+          window.userLoading = weui.loading('提交中...');
+
+          if (this.isStarted) {
+            socket.emit('weight', key, this.form.newWeight);
+          } else if (! this.isMaster) {
+            socket.emit('weight', key, this.form.oldWeight)
+          } else if (key) {
+            socket.emit('user-update', key, this.form.name, this.form.oldWeight)
+          } else {
+            socket.emit('user-add', this.form.name, this.form.oldWeight)
+          }
+
+          this.showForm = false;
+        },
+        // 删除用户
+        deleteUser() {
+          window.userLoading = weui.loading('提交中...');
+
+          socket.emit('user-delete', this.form.id);
+
+          this.showForm = false;
+        },
+        // 更新用户
+        updateUser(key, user = null) {
+          if (this.users[key]) {
+            if (user) {
+              Object.assign(this.users[key], user)
+            } else {
+              Vue.delete(this.users, key)
+            }
+          } else {
+            user.show = false;
+            Vue.set(this.users, key, user);
+          }
+
+          this.filter();
+
+          window.userLoading && setTimeout(() => {
+            window.userLoading.hide();
+            delete window.userLoading;
+          }, 300);
+        },
+
+        // 过滤用户
+        filter() {
+          const keyword = this.keyword;
+
+          for (key in this.users) {
+            this.users[key].show = ! keyword || this.users[key].name.indexOf(keyword) >= 0
+          }
+        },
+
+        // 格式化查询参数
+        formatQueries() {
+          var queries = {};
+
+          location.search.slice(1).split('&')
+            .map(function (el) { return el.split('=') })
+            .forEach(function (el) { queries[el[0]] = el[1] });
+
+          return queries;
+        }
+      }
+    })
+  </script>
+</body>
+</html>

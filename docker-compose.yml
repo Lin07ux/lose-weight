@@ -1,0 +1,44 @@
+version: '3'
+services:
+
+  redis:
+    image: redis:6.2.3-alpine
+    restart: unless-stopped
+    ports:
+      - 6379:6379
+    networks:
+      - app-network
+
+  socket:
+    image: node:16-alpine
+    user: "node"
+    working_dir: /home/node/app
+    command: "npm start"
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=develop
+    volumes:
+      - .:/home/node/app
+    ports:
+      - "3002:3002"
+    depends_on:
+      - redis
+    networks:
+      - app-network
+
+  web:
+    image: nginx:stable-alpine
+    restart: unless-stopped
+    volumes:
+      - ./public:/var/www/html/lose-weight
+      - ./nginx.conf:/etc/nginx/conf.d/lose-weight.conf
+    ports:
+      - "80:80"
+    depends_on:
+      - socket
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
