@@ -57,7 +57,7 @@ module.exports = async function initSocketIo (httpServer) {
         let key = await redisClient.addUser(user);
         
         if (key) {
-          io.emit('user', key, users[key] = user);
+          io.emit('user-update', key, users[key] = user);
         } else {
           socket.emit('error', '添加用户失败');
         }

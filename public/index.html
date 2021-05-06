@@ -79,7 +79,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
   <script src="https://res.wx.qq.com/open/libs/weuijs/1.2.1/weui.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.0.1/dist/socket.io.min.js"></script>
   <script>
     const BASE_REDUCTION = 50;
 
@@ -89,7 +89,7 @@
         isMaster: false,
         loading: false,
         isStarted: false,
-        showRanking: true,
+        showRanking: false,
         showForm: false,
         form: { id: null, name: null, oldWeight: null, newWeight: null },
         users: {},
