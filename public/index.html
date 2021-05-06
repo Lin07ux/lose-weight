@@ -59,11 +59,14 @@
     </section>
 
     <section class="ranking" v-show="showRanking">
-      <div class="title">减重排行榜</div>
+      <img src="http://cnd.qiniu.lin07ux.cn/lose-weight/title.png" class="title">
 
       <ul class="list">
-        <li class="item" v-for="(user, order) in rankList">
-          <i class="order" :class="{ first: order == 0, second: order == 1, third: order== 2 }">{{ order + 1 }}</i>
+        <li class="item" v-for="(user, order) in rankList" v-show="order >= startOrder && order < endOrder">
+          <i class="order first" v-if="order === 0"><img src="http://cnd.qiniu.lin07ux.cn/lose-weight/first.png"></i>
+          <i class="order second" v-else-if="order === 1"><img src="http://cnd.qiniu.lin07ux.cn/lose-weight/second.png"></i>
+          <i class="order third" v-else-if="order === 2"><img src="http://cnd.qiniu.lin07ux.cn/lose-weight/third.png"></i>
+          <i class="order" v-else>{{ order + 1 }}</i>
           <span class="name">{{ user.name }}</span>
           <span class="percentage">
             <span class="entity" :class="{ red: user.reduction > 0 }" :style="{ width: user.percentage + '%' }"></span>
@@ -73,6 +76,8 @@
         </li>
       </ul>
 
+      <span class="page" @click="prevPage">&lt;上一页</span>
+      <span class="page" @click="nextPage">下一页&gt;</span>
       <button class="toggle" @click="showRanking = false">查看全部用户</button>
     </section>
   </div>
@@ -82,6 +87,7 @@
   <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.0.1/dist/socket.io.min.js"></script>
   <script>
     const BASE_REDUCTION = 50;
+    const PAGE_SIZE = 40;
 
     new Vue({
       el: "#app",
@@ -93,7 +99,9 @@
         showForm: false,
         form: { id: null, name: null, oldWeight: null, newWeight: null },
         users: {},
-        keyword: ''
+        keyword: '',
+        startOrder: 0,
+        endOrder: PAGE_SIZE
       },
       computed: {
         rankList() {
@@ -231,6 +239,21 @@
 
           for (key in this.users) {
             this.users[key].show = ! keyword || this.users[key].name.indexOf(keyword) >= 0
+          }
+        },
+
+        // 上一页
+        prevPage() {
+          if (this.startOrder >= PAGE_SIZE) {
+            this.startOrder -= PAGE_SIZE;
+            this.endOrder -= PAGE_SIZE;
+          }
+        },
+        // 下一页
+        nextPage() {
+          if (this.startOrder + PAGE_SIZE < this.rankList.length) {
+            this.startOrder += PAGE_SIZE;
+            this.endOrder += PAGE_SIZE;
           }
         },
 

@@ -20,13 +20,13 @@ textarea{overflow:auto}
 /*! customer style */
 [v-cloak]{display:none!important}
 body{text-align:center;background:linear-gradient(#1e2491,#3e1580) no-repeat center/100% 100%}
-#app,#app .users,#app .ranking{position:relative;min-height:100%}
-button{display:block;padding:10px 1.4em;margin-right:2em;float:right;color:#fff;font-size:1.3em;border:2px solid #47a0fd;border-radius:5px;background:transparent;outline:none;cursor:pointer}
-.list{width:100%;min-height:80vh;padding:1em 2em;color:#f9f9f9;overflow:hidden}
+#app{position:relative;height:100vh;background:no-repeat center/cover url(http://cnd.qiniu.lin07ux.cn/lose-weight/bg.png)}
+.users,.ranking{padding:10px 5%;height: 100%}
+.list{padding:1em 2em;color:#f9f9f9;background:rgba(0,0,0,.6)}
+button{display:block;padding:10px 1.4em;margin-top:1em;float:right;color:#fff;font-size:1.3em;font-weight:bold;border:3px solid #ffcb85;border-radius:1.3em;background:linear-gradient(0,#a400fe,#c864fe);outline:none;cursor:pointer;box-shadow:inset 0 5px #a400fe,0 5px #7e00fe}
 
-.users{padding-top:10px}
-.users .search{display:block;width:40%;min-width:10em;margin:0 auto;color:#fff;line-height:3em;text-align:center;border:none;border-bottom:1px solid #000;background:transparent;outline:none}
-.users .list{display:flex;flex-wrap:wrap;align-content:baseline}
+.users .search{display:block;width:40%;min-width:10em;margin:0 auto 1em;color:#fff;line-height:3em;text-align:center;border:none;border-bottom:1px solid #000;background:transparent;outline:none}
+.users .list{display:flex;flex-wrap:wrap;align-content:baseline;height:80%;overflow:auto}
 .users .list .item{display:flex;align-items:center;justify-content:center;width:auto;min-width:10em;height:3em;padding:0 12px;margin:1.1em .6em;border:1px solid #564949;cursor:pointer}
 .users .list .item.add{color:#ccc}
 .users .list .item:hover{border-color:#efefef}
@@ -34,15 +34,18 @@ button{display:block;padding:10px 1.4em;margin-right:2em;float:right;color:#fff;
 .users .form .weui-cells:after,.users .form .weui-cells:before{display:none}
 .users .form .weui-label{text-align:left;width:100px}
 
-.ranking .title{height:10vh;color:#fff;font-size:2em;line-height:3em}
-.ranking .list{display:flex;flex-flow:column;flex-wrap:wrap}
+.ranking .title{height:10vh;line-height:3em}
+.ranking .list{display:flex;flex-flow:column;flex-wrap:wrap;height:47em}
 .ranking .item{float:left;display:flex;width:50%;list-style:none;text-align:left;padding:0 2em;line-height:2.3;align-items:center}
 .ranking .item .order{width:1.5em;display:inline-block}
-.ranking .item .order.first{}
-.ranking .item .order.second{}
-.ranking .item .order.third{}
+.ranking .item .order img{vertical-align:middle}
+.ranking .item .first img{width: 1.6em;margin-left: -.3em}
+.ranking .item .second img{width: 1.2em;margin-left: -.2em}
+.ranking .item .third img{width: 1em;margin-left: -.1em}
 .ranking .item .name{display:inline-block;width:8em;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;vertical-align:bottom}
 .ranking .item .percentage{position:relative;flex:1;height:.8em;min-width:15em;margin:0 1em;display:inline-block;background:#fff;border-radius:.4em}
 .ranking .item .percentage .entity{position:absolute;display:inline-block;left:-1px;width:6%;height:100%;border-radius:inherit;background-color:#2184ee}
 .ranking .item .percentage .entity.red{background-color:#f95901}
 .ranking .item .reduction{display:inline-block;width:4em}
+.ranking .page{display:inline-block;float:left;margin:1em .6em 0 0;padding:2px 1em;color:#d4d4d4;border:1px solid;cursor:pointer}
+.ranking .page:hover{background-color:rgba(255,255,255,.5);color:#323232}
