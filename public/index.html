@@ -10,7 +10,7 @@
 <body>
   <div id="app" v-cloak>
     <section class="users" v-show="! showRanking">
-      <input class="search" type="text" placeholder="输入用户姓名，按下 Enter 键搜索" v-model.trim="keyword" @keyup.enter="filter">
+      <input class="search" type="text" placeholder="输入队伍姓名，按下 Enter 键搜索" v-model.trim="keyword" @keyup.enter="filter">
 
       <div class="list">
         <div class="item" v-for="(user, key) in users" v-show="user.show" @click="editUser(key)">{{ user.name }}</div>
@@ -29,7 +29,7 @@
               <label class="weui-label">队伍名称：</label>
             </div>
             <div class="weui-cell__bd">
-              <input class="weui-input" v-model.trim="form.name" type="text" :readonly="!isMaster || isStarted" placeholder="输入用户姓名">
+              <input class="weui-input" v-model.trim="form.name" type="text" :readonly="!isMaster || isStarted" placeholder="输入队伍名称">
             </div>
           </div>
           <div class="weui-cell">
@@ -37,7 +37,7 @@
               <label class="weui-label">初始体重：</label>
             </div>
             <div class="weui-cell__bd">
-              <input class="weui-input" v-model.number="form.oldWeight" type="num" min="1" :readonly="isStarted" placeholder="请输入用户初始体重（kg）">
+              <input class="weui-input" v-model.number="form.oldWeight" type="num" min="1" :readonly="isStarted" placeholder="请输入队伍初始体重（kg）">
             </div>
           </div>
           <div class="weui-cell" v-if="isStarted">
@@ -45,7 +45,7 @@
               <label class="weui-label">当前体重：</label>
             </div>
             <div class="weui-cell__bd">
-              <input class="weui-input" v-model.number="form.newWeight" type="num" min="1" placeholder="请输入用户当前体重（kg）">
+              <input class="weui-input" v-model.number="form.newWeight" type="num" min="1" placeholder="请输入队伍当前体重（kg）">
             </div>
           </div>
         </div>
@@ -164,28 +164,28 @@
           }, 300)
         },
 
-        // 添加用户
+        // 添加队伍
         addUser() {
           Object.assign(this.form, { id: null, name: null, oldWeight: null, newWeight: null });
           this.showForm = true;
         },
-        // 编辑用户
+        // 编辑队伍
         editUser(key) {
           Object.assign(this.form, this.users[key], { id: key });
           this.showForm = true;
         },
-        // 提交用户信息
+        // 提交队伍信息
         submit() {
           if (! this.form.name) {
-            return weui.topTips('请输入用户姓名', 2500)
+            return weui.topTips('请输入队伍姓名', 2500)
           }
 
           if (this.form.oldWeight < 1) {
-            return weui.topTips('请输入正确的用户初始的体重', 2500)
+            return weui.topTips('请输入正确的队伍初始的体重', 2500)
           }
 
           if (this.isStarted && this.form.newWeight < 1) {
-            return weui.topTips('请输入正确的用户当前体重', 2500);
+            return weui.topTips('请输入正确的队伍当前体重', 2500);
           }
 
           const key = this.form.id;
@@ -204,7 +204,7 @@
 
           this.showForm = false;
         },
-        // 删除用户
+        // 删除队伍
         deleteUser() {
           window.userLoading = weui.loading('提交中...');
 
@@ -212,7 +212,7 @@
 
           this.showForm = false;
         },
-        // 更新用户
+        // 更新队伍
         updateUser(key, user = null) {
           if (this.users[key]) {
             if (user) {
@@ -233,7 +233,7 @@
           }, 300);
         },
 
-        // 过滤用户
+        // 过滤队伍
         filter() {
           const keyword = this.keyword;
 
