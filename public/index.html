@@ -69,7 +69,8 @@
           <i class="order" v-else>{{ order + 1 }}</i>
           <span class="name">{{ user.name }}</span>
           <span class="percentage">
-            <span class="entity" :class="{ red: user.reduction > 0 }" :style="{ width: user.percentage + '%' }"></span>
+            <span class="entity" :class="{ red: user.reduction > 0 }"
+             :style="{ width: (user.percentage >= 100 ? 101 : user.percentage) + '%' }"></span>
           </span>
           <span class="reduction" v-if="user.reduction <= 0">{{ user.reduction }}kg</span>
           <span class="reduction red" v-else>+{{ user.reduction }}kg</span>
@@ -111,7 +112,7 @@
             let { name, oldWeight, newWeight } = this.users[key];
 
             if (newWeight > 0) {
-              let reduction = newWeight - oldWeight;
+              let reduction = (newWeight - oldWeight).toFixed(2);
               let percentage = Math.abs(reduction) / BASE_REDUCTION * 100;
 
               list.push({ name, oldWeight, newWeight, reduction, percentage })

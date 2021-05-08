@@ -43,7 +43,7 @@ button{display:block;padding:10px 1.4em;margin-top:1em;float:right;color:#fff;fo
 .ranking .item .second img{width: 1.2em;margin-left: -.2em}
 .ranking .item .third img{width: 1em;margin-left: -.1em}
 .ranking .item .name{display:inline-block;width:8em;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;vertical-align:bottom}
-.ranking .item .percentage{position:relative;flex:1;height:.8em;min-width:15em;margin:0 1em;display:inline-block;background:#fff;border-radius:.4em}
+.ranking .item .percentage{position:relative;flex:1;height:.8em;min-width:15em;margin:0 1em;display:inline-block;background:#fff;border-radius:.4em;overflow:hidden}
 .ranking .item .percentage .entity{position:absolute;display:inline-block;left:-1px;width:6%;height:100%;border-radius:inherit;background-color:#2184ee}
 .ranking .item .percentage .entity.red{background-color:#f95901}
 .ranking .item .reduction{display:inline-block;width:4em}
