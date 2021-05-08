@@ -80,6 +80,13 @@
       <span class="page" @click="prevPage">&lt;上一页</span>
       <span class="page" @click="nextPage">下一页&gt;</span>
       <button class="toggle" @click="showRanking = false">查看全部队伍</button>
+
+      <div class="toast" v-show="showUserTimer >= 0">
+        <p>{{ currentUser.name }}</p>
+        <p v-if="currentUser.reduction >= 0">增重：<span class="reduction">{{ currentUser.reduction }}kg</span></p>
+        <p v-else>减重：<span class="reduction" style="color:#2184ee">{{ -currentUser.reduction }}kg</span></p>
+        <p>排名：<span class="order">{{ currentUser.order }}</span></p>
+      </div>
     </section>
   </div>
 
@@ -102,7 +109,9 @@
         users: {},
         keyword: '',
         startOrder: 0,
-        endOrder: PAGE_SIZE
+        endOrder: PAGE_SIZE,
+        currentUser: { name: null, reduction: null, order: 0 },
+        showUserTimer: -1
       },
       computed: {
         rankList() {
@@ -115,7 +124,7 @@
               let reduction = (newWeight - oldWeight).toFixed(2);
               let percentage = Math.abs(reduction) / BASE_REDUCTION * 100;
 
-              list.push({ name, oldWeight, newWeight, reduction, percentage })
+              list.push({ key, name, oldWeight, newWeight, reduction, percentage })
             }
           }
 
@@ -217,7 +226,8 @@
         updateUser(key, user = null) {
           if (this.users[key]) {
             if (user) {
-              Object.assign(this.users[key], user)
+              Object.assign(this.users[key], user);
+              user.newWeight > 0 && ! this.isMaster && this.showUser(key); // 如果更新了当前体重需要弹窗显示
             } else {
               Vue.delete(this.users, key)
             }
@@ -232,6 +242,17 @@
             window.userLoading.hide();
             delete window.userLoading;
           }, 300);
+        },
+        showUser(key) {
+          this.$nextTick(() => {
+            const index = this.rankList.findIndex(user => user.key === key);
+            if (index >= 0) {
+              const user = this.rankList[index];
+              Object.assign(this.currentUser, { order: index, name: user.name, reduction: user.reduction });
+              clearTimeout(this.showUserTimer);
+              this.showUserTimer = setTimeout(() => { this.showUserTimer = -1 }, 3000)
+            }
+          })
         },
 
         // 过滤队伍

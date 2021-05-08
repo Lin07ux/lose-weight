@@ -30,7 +30,7 @@ button{display:block;padding:10px 1.4em;margin-top:1em;float:right;color:#fff;fo
 .users .list .item{display:flex;align-items:center;justify-content:center;width:auto;min-width:10em;height:3em;padding:0 12px;margin:1.1em .6em;border:1px solid #564949;cursor:pointer}
 .users .list .item.add{color:#ccc}
 .users .list .item:hover{border-color:#efefef}
-.users .form{position:fixed;top:30vh;left:50%;width:360px;padding:1em;background:#fff;transform:translateX(-50%);box-shadow:0 0 5px 3px rgb(0,0,0,.3)}
+.users .form,.ranking .toast{position:fixed;top:30vh;left:50%;width:360px;padding:1em;background:#fff;transform:translateX(-50%);box-shadow:0 0 15px 5px rgb(0,0,0,.6)}
 .users .form .weui-cells:after,.users .form .weui-cells:before{display:none}
 .users .form .weui-label{text-align:left;width:100px}
 
@@ -49,3 +49,6 @@ button{display:block;padding:10px 1.4em;margin-top:1em;float:right;color:#fff;fo
 .ranking .item .reduction{display:inline-block;width:4em}
 .ranking .page{display:inline-block;float:left;margin:1em .6em 0 0;padding:2px 1em;color:#d4d4d4;border:1px solid;cursor:pointer}
 .ranking .page:hover{background-color:rgba(255,255,255,.5);color:#323232}
+.ranking .toast{border-radius:.3em;color:#323232;font-size:1.1em}
+.ranking .toast .reduction{font-size:2em;color:#f95901;font-weight:bold;letter-spacing:2px;vertical-align:middle}
+.ranking .toast .order{font-size:2em;font-weight:bold;letter-spacing:2px;color:#ffcb85;vertical-align:middle}
