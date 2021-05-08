@@ -14,19 +14,19 @@
 
       <div class="list">
         <div class="item" v-for="(user, key) in users" v-show="user.show" @click="editUser(key)">{{ user.name }}</div>
-        <div class="item add" v-if="isMaster && ! isStarted" @click="addUser">+ 添加用户</div>
+        <div class="item add" v-if="isMaster && ! isStarted" @click="addUser">+ 添加队伍</div>
       </div>
 
       <button class="begin" v-if="! isStarted" @click="start">开始排行</button>
       <button class="toggle" v-else @click="showRanking = true">查看排行榜</button>
 
       <div id="form" class="form" v-show="showForm">
-        <h3 class="title">{{ form.id ? "更新信息" : "添加用户"}}</h3>
+        <h3 class="title">{{ form.id ? "更新信息" : "添加队伍"}}</h3>
 
         <div class="weui-cells weui-cells_form">
           <div class="weui-cell">
             <div class="weui-cell__hd">
-              <label class="weui-label">用户姓名：</label>
+              <label class="weui-label">队伍名称：</label>
             </div>
             <div class="weui-cell__bd">
               <input class="weui-input" v-model.trim="form.name" type="text" :readonly="!isMaster || isStarted" placeholder="输入用户姓名">
@@ -78,7 +78,7 @@
 
       <span class="page" @click="prevPage">&lt;上一页</span>
       <span class="page" @click="nextPage">下一页&gt;</span>
-      <button class="toggle" @click="showRanking = false">查看全部用户</button>
+      <button class="toggle" @click="showRanking = false">查看全部队伍</button>
     </section>
   </div>
 
