@@ -60,6 +60,7 @@
 
     <section class="ranking" v-show="showRanking">
       <img src="http://cnd.qiniu.lin07ux.cn/lose-weight/title.png" class="title">
+      <div class="total">完成总目标：<span>{{ totalReduction }}</span><i style="font-style:normal">kg</i></div>
 
       <ul class="list">
         <li class="item" v-for="(user, order) in rankList" v-show="order >= startOrder && order < endOrder">
@@ -67,7 +68,7 @@
           <i class="order second" v-else-if="order === 1"><img src="http://cnd.qiniu.lin07ux.cn/lose-weight/second.png"></i>
           <i class="order third" v-else-if="order === 2"><img src="http://cnd.qiniu.lin07ux.cn/lose-weight/third.png"></i>
           <i class="order" v-else>{{ order + 1 }}</i>
-          <span class="name">{{ user.name }}</span>
+          <span class="name ellipsis">{{ user.name }}</span>
           <span class="percentage">
             <span class="entity" :class="{ red: user.reduction > 0 }"
              :style="{ width: (user.percentage >= 100 ? 101 : user.percentage) + '%' }"></span>
@@ -82,7 +83,7 @@
       <button class="toggle" @click="showRanking = false">查看全部队伍</button>
 
       <div class="toast" v-show="showUserTimer >= 0">
-        <p>{{ currentUser.name }}</p>
+        <p class="ellipsis">{{ currentUser.name }}</p>
         <p v-if="currentUser.reduction >= 0">增重：<span class="reduction">{{ currentUser.reduction }}kg</span></p>
         <p v-else>减重：<span class="reduction" style="color:#2184ee">{{ -currentUser.reduction }}kg</span></p>
         <p>排名：<span class="order">{{ currentUser.order }}</span></p>
@@ -94,7 +95,7 @@
   <script src="https://res.wx.qq.com/open/libs/weuijs/1.2.1/weui.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.0.1/dist/socket.io.min.js"></script>
   <script>
-    const BASE_REDUCTION = 50;
+    const BASE_REDUCTION = 20;
     const PAGE_SIZE = 40;
 
     new Vue({
@@ -131,6 +132,9 @@
           return list.sort((prevUser, nextUser) => {
             return (prevUser.reduction - nextUser.reduction) || (prevUser.newWeight - nextUser.newWeight);
           })
+        },
+        totalReduction() {
+          return this.rankList.reduce((total, user) => total + +user.reduction, 0)
         }
       },
       created () {
