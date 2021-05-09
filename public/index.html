@@ -85,9 +85,8 @@
 
       <div class="toast" v-show="showUserTimer >= 0">
         <p class="ellipsis">{{ currentUser.name }}</p>
-        <p v-if="currentUser.reduction >= 0">增重：<span class="reduction">{{ toFixed(currentUser.reduction) }}kg</span></p>
-        <p v-else>减重：<span class="reduction" style="color:#2184ee">{{ toFixed(-currentUser.reduction) }}kg</span></p>
-        <p>排名：<span class="order">{{ currentUser.order }}</span></p>
+        <p>绝对值：<span class="reduction" :class="{ orange: currentUser.relatives >= 0 }">{{ toFixed(currentUser.relatives) }}%</span></p>
+        <p>目前排名：<span class="order">{{ currentUser.order }}</span></p>
       </div>
     </section>
   </div>
@@ -112,7 +111,7 @@
         keyword: '',
         startOrder: 0,
         endOrder: PAGE_SIZE,
-        currentUser: { name: '', reduction: 0, order: 0 },
+        currentUser: { name: '', relatives: 0, order: 0 },
         showUserTimer: -1
       },
       computed: {
@@ -255,7 +254,7 @@
             const index = this.rankList.findIndex(user => user.key === key);
             if (index >= 0) {
               const user = this.rankList[index];
-              Object.assign(this.currentUser, { order: index, name: user.name, reduction: user.reduction });
+              Object.assign(this.currentUser, { order: index, name: user.name, relatives: user.relatives });
               clearTimeout(this.showUserTimer);
               this.showUserTimer = setTimeout(() => { this.showUserTimer = -1 }, 5000)
             }
