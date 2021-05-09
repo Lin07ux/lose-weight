@@ -247,6 +247,7 @@
             delete window.userLoading;
           }, 300);
         },
+        // 显示队伍排名
         showUser(key) {
           this.$nextTick(() => {
             const index = this.rankList.findIndex(user => user.key === key);
@@ -254,7 +255,7 @@
               const user = this.rankList[index];
               Object.assign(this.currentUser, { order: index, name: user.name, reduction: user.reduction });
               clearTimeout(this.showUserTimer);
-              this.showUserTimer = setTimeout(() => { this.showUserTimer = -1 }, 3000)
+              this.showUserTimer = setTimeout(() => { this.showUserTimer = -1 }, 5000)
             }
           })
         },

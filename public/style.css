@@ -55,6 +55,6 @@ button{display:block;padding:10px 1.4em;margin-top:1em;float:right;color:#fff;fo
 .ranking .item .reduction{display:inline-block;width:4em}
 .ranking .page{display:inline-block;float:left;margin:1em .6em 0 0;padding:2px 1em;color:#d4d4d4;border:1px solid;cursor:pointer}
 .ranking .page:hover{background-color:rgba(255,255,255,.5);color:#323232}
-.ranking .toast{border-radius:.3em;color:#323232;font-size:1.3em}
+.ranking .toast{border-radius:.3em;color:#323232;font-size:1.3em;background:no-repeat center/cover url(http://cnd.qiniu.lin07ux.cn/lose-weight/bg-toast.jpeg);width:400px}
 .ranking .toast .reduction{font-size:2em;color:#f95901;font-weight:bold;letter-spacing:2px}
 .ranking .toast .order{font-size:2em;font-weight:bold;letter-spacing:2px;color:#ffcb85}
