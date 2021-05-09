@@ -73,8 +73,9 @@
             <span class="entity" :class="{ red: user.reduction > 0 }"
              :style="{ width: (user.percentage >= 100 ? 101 : user.percentage) + '%' }"></span>
           </span>
-          <span class="reduction" v-if="user.reduction <= 0">{{ user.reduction }}kg</span>
-          <span class="reduction red" v-else>+{{ user.reduction }}kg</span>
+          <span class="relatives">{{ toFixed(user.relatives) }}%</span>
+          <span style="margin:0 3px;color:#848484">|</span>
+          <span class="reduction">{{ toFixed(user.reduction) }}kg</span>
         </li>
       </ul>
 
@@ -95,7 +96,7 @@
   <script src="https://res.wx.qq.com/open/libs/weuijs/1.2.1/weui.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.0.1/dist/socket.io.min.js"></script>
   <script>
-    const BASE_REDUCTION = 20;
+    const BASE_REDUCTION = 10;
     const PAGE_SIZE = 40;
 
     new Vue({
@@ -122,19 +123,20 @@
             let { name, oldWeight, newWeight } = this.users[key];
 
             if (newWeight > 0) {
-              let reduction = (newWeight - oldWeight).toFixed(2);
-              let percentage = Math.abs(reduction) / BASE_REDUCTION * 100;
+              let reduction = newWeight - oldWeight;
+              let relatives = reduction / oldWeight * 100;
+              let percentage = Math.abs(relatives) / BASE_REDUCTION * 100;
 
-              list.push({ key, name, oldWeight, newWeight, reduction, percentage })
+              list.push({ key, name, newWeight, reduction, relatives, percentage })
             }
           }
 
           return list.sort((prevUser, nextUser) => {
-            return (prevUser.reduction - nextUser.reduction) || (prevUser.newWeight - nextUser.newWeight);
+            return (prevUser.relatives - nextUser.relatives) || (prevUser.newWeight - nextUser.newWeight);
           })
         },
         totalReduction() {
-          return this.rankList.reduce((total, user) => total + +user.reduction, 0)
+          return this.rankList.reduce((total, user) => total + +user.reduction, 0).toFixed(2)
         }
       },
       created () {
@@ -258,6 +260,10 @@
               this.showUserTimer = setTimeout(() => { this.showUserTimer = -1 }, 5000)
             }
           })
+        },
+
+        toFixed(value) {
+          return value.toFixed(2)
         },
 
         // 过滤队伍
