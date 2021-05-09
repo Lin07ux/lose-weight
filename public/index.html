@@ -64,9 +64,9 @@
 
       <ul class="list">
         <li class="item" v-for="(user, order) in rankList" v-show="order >= startOrder && order < endOrder">
-          <i class="order first" v-if="order === 0"><img src="http://cnd.qiniu.lin07ux.cn/lose-weight/first.png"></i>
-          <i class="order second" v-else-if="order === 1"><img src="http://cnd.qiniu.lin07ux.cn/lose-weight/second.png"></i>
-          <i class="order third" v-else-if="order === 2"><img src="http://cnd.qiniu.lin07ux.cn/lose-weight/third.png"></i>
+          <i class="order first" v-if="order < 3"><img src="http://cnd.qiniu.lin07ux.cn/lose-weight/first.png"></i>
+          <i class="order second" v-else-if="order < 6"><img src="http://cnd.qiniu.lin07ux.cn/lose-weight/second.png"></i>
+          <i class="order third" v-else-if="order < 10"><img src="http://cnd.qiniu.lin07ux.cn/lose-weight/third.png"></i>
           <i class="order" v-else>{{ order + 1 }}</i>
           <span class="name ellipsis">{{ user.name }}</span>
           <span class="percentage">
