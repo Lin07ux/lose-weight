@@ -37,10 +37,10 @@ button{display:block;padding:10px 1.4em;margin-top:1em;float:right;color:#fff;fo
 .users .form .weui-label{text-align:left;width:100px}
 
 .ranking .title{height:10vh;line-height:3em}
-.ranking .total{position:absolute;right:1em;top:1em;font-size:1.1em;padding:.5em 1em;border:2px solid #ffcb85;cursor:pointer}
-.ranking .total span{font-size:1.8em;margin:2px}
-.ranking .total:hover{box-shadow:0 0 5px 3px rgb(199 199 199);border-radius:3px;border-color:transparent;background:#943ff3}
-.ranking .total:hover span,.ranking .total:hover i{color:#ffcb85}
+.ranking .total{position:absolute;right:.6em;top:.5em;font-size:1.5em;padding:.5em 1em;border:2px solid #ffcb85;cursor:pointer}
+.ranking .total span{font-size:1.4em;margin:2px}
+.ranking .total:hover{box-shadow:0 0 5px 3px rgb(199 199 199);border-radius:3px;border-color:transparent;background:#943ff3;color:#fff}
+.ranking .total:hover span,.ranking .total:hover i{color:#ffeb3b}
 .ranking .list{display:flex;flex-flow:column;flex-wrap:wrap;height:47em}
 .ranking .item{float:left;display:flex;width:50%;list-style:none;text-align:left;padding:0 2em;line-height:2.3;align-items:center}
 .ranking .item .order{width:1.5em;display:inline-block}

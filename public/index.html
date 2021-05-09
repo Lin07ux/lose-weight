@@ -85,8 +85,8 @@
 
       <div class="toast" v-show="showUserTimer >= 0">
         <p class="ellipsis">{{ currentUser.name }}</p>
-        <p v-if="currentUser.reduction >= 0">增重：<span class="reduction">{{ currentUser.reduction }}kg</span></p>
-        <p v-else>减重：<span class="reduction" style="color:#2184ee">{{ -currentUser.reduction }}kg</span></p>
+        <p v-if="currentUser.reduction >= 0">增重：<span class="reduction">{{ toFixed(currentUser.reduction) }}kg</span></p>
+        <p v-else>减重：<span class="reduction" style="color:#2184ee">{{ toFixed(-currentUser.reduction) }}kg</span></p>
         <p>排名：<span class="order">{{ currentUser.order }}</span></p>
       </div>
     </section>
@@ -112,7 +112,7 @@
         keyword: '',
         startOrder: 0,
         endOrder: PAGE_SIZE,
-        currentUser: { name: null, reduction: null, order: 0 },
+        currentUser: { name: '', reduction: 0, order: 0 },
         showUserTimer: -1
       },
       computed: {
