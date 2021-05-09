@@ -37,7 +37,7 @@
               <label class="weui-label">初始体重：</label>
             </div>
             <div class="weui-cell__bd">
-              <input class="weui-input" v-model.number="form.oldWeight" type="num" min="1" :readonly="isStarted" placeholder="请输入队伍初始体重（kg）">
+              <input class="weui-input" v-model.number="form.oldWeight" type="num" min="0" :readonly="isStarted" placeholder="请输入队伍初始体重（kg）">
             </div>
           </div>
           <div class="weui-cell" v-if="isStarted">
@@ -45,7 +45,7 @@
               <label class="weui-label">当前体重：</label>
             </div>
             <div class="weui-cell__bd">
-              <input class="weui-input" v-model.number="form.newWeight" type="num" min="1" placeholder="请输入队伍当前体重（kg）">
+              <input class="weui-input" v-model.number="form.newWeight" type="num" min="0" placeholder="请输入队伍当前体重（kg）">
             </div>
           </div>
         </div>
@@ -194,11 +194,11 @@
             return weui.topTips('请输入队伍姓名', 2500)
           }
 
-          if (this.form.oldWeight < 1) {
+          if (this.form.oldWeight < 0) {
             return weui.topTips('请输入正确的队伍初始的体重', 2500)
           }
 
-          if (this.isStarted && this.form.newWeight < 1) {
+          if (this.isStarted && this.form.newWeight < 0) {
             return weui.topTips('请输入正确的队伍当前体重', 2500);
           }
 

@@ -32,10 +32,6 @@ module.exports = async function initSocketIo (httpServer) {
         socket.emit('error', '用户不存在');
       }
 
-      if (weight < 1) {
-        socket.emit('error', '体重数值不正确');
-      }
-
       let weightType = isStarted ? 'newWeight' : 'oldWeight';
       let user = Object.assign({}, users[key], { [weightType]: weight });
 
