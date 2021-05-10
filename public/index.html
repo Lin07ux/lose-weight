@@ -254,7 +254,7 @@
             const index = this.rankList.findIndex(user => user.key === key);
             if (index >= 0) {
               const user = this.rankList[index];
-              Object.assign(this.currentUser, { order: index, name: user.name, relatives: user.relatives });
+              Object.assign(this.currentUser, { order: index + 1, name: user.name, relatives: user.relatives });
               clearTimeout(this.showUserTimer);
               this.showUserTimer = setTimeout(() => { this.showUserTimer = -1 }, 5000)
             }
