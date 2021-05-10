@@ -98,7 +98,7 @@
     const BASE_REDUCTION = 10;
     const PAGE_SIZE = 40;
 
-    new Vue({
+    const vm = new Vue({
       el: "#app",
       data: {
         isMaster: false,
@@ -126,7 +126,7 @@
               let relatives = reduction / oldWeight * 100;
               let percentage = Math.abs(relatives) / BASE_REDUCTION * 100;
 
-              list.push({ key, name, newWeight, reduction, relatives, percentage })
+              list.push({ key, name, newWeight, oldWeight, reduction, relatives, percentage })
             }
           }
 
@@ -287,6 +287,24 @@
             this.startOrder += PAGE_SIZE;
             this.endOrder += PAGE_SIZE;
           }
+        },
+
+        // 导出数据
+        export() {
+          const results = this.rankList.map((user, index) => {
+            return [
+              index + 1,
+              user.name,
+              user.newWeight + 'kg',
+              user.oldWeight + 'kg',
+              user.relatives.toFixed(2) + '%',
+              user.reduction.toFixed(2) + 'kg',
+            ].join(',')
+          });
+
+          results.unshift('排名,队伍名称,当前体重(kg),初始体重(kg),相对减重(%),减重值(kg)')
+
+          console.log(results.join('\n'))
         },
 
         // 格式化查询参数
